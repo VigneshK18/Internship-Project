@@ -1,0 +1,64 @@
+{
+  "info": {
+    "name": "TechKart API",
+    "description": "REST API of the Laravel e-commerce capstone. Run 'Get token' first; the token is saved to the {{token}} variable automatically.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:8000/api" },
+    { "key": "token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Get token",
+      "event": [{ "listen": "test", "script": { "exec": ["pm.collectionVariables.set('token', pm.response.json().token);"], "type": "text/javascript" } }],
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"email\": \"customer@techkart.test\",\n  \"password\": \"password\",\n  \"device_name\": \"postman\"\n}" },
+        "url": { "raw": "{{base_url}}/tokens", "host": ["{{base_url}}"], "path": ["tokens"] }
+      }
+    },
+    {
+      "name": "List products (public)",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Accept", "value": "application/json" }],
+        "url": { "raw": "{{base_url}}/products?q=&category=&sort=price_asc&per_page=12", "host": ["{{base_url}}"], "path": ["products"],
+                 "query": [{ "key": "q", "value": "" }, { "key": "category", "value": "" }, { "key": "sort", "value": "price_asc" }, { "key": "per_page", "value": "12" }] }
+      }
+    },
+    {
+      "name": "Show product (public)",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Accept", "value": "application/json" }],
+        "url": { "raw": "{{base_url}}/products/wireless-mouse", "host": ["{{base_url}}"], "path": ["products", "wireless-mouse"] }
+      }
+    },
+    {
+      "name": "Current user (token)",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": { "raw": "{{base_url}}/user", "host": ["{{base_url}}"], "path": ["user"] }
+      }
+    },
+    {
+      "name": "My orders (token)",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": { "raw": "{{base_url}}/orders", "host": ["{{base_url}}"], "path": ["orders"] }
+      }
+    },
+    {
+      "name": "Revoke token",
+      "request": {
+        "method": "DELETE",
+        "header": [{ "key": "Accept", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": { "raw": "{{base_url}}/tokens/current", "host": ["{{base_url}}"], "path": ["tokens", "current"] }
+      }
+    }
+  ]
+}
